@@ -66,3 +66,7 @@
 * https://www.stackhawk.com/blog/rails-xss-examples-and-prevention/
 
 
+#### Form ever follows function  (i.e. function before form)
+* https://www.heartinternet.uk/blog/form-over-function-beautifully-designed-things-that-simply-dont-work/
+
+
