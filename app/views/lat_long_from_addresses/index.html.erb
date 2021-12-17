@@ -1,0 +1,43 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Lat Long From Addresses</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Address</th>
+      <th>City</th>
+      <th>State</th>
+      <th>Zip</th>
+      <th>Lat</th>
+      <th>Long</th>
+      <th>Previously looked up</th>
+      <th>Json resp</th>
+      <th>Display address</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @lat_long_from_addresses.each do |lat_long_from_address| %>
+      <tr>
+        <td><%= lat_long_from_address.address %></td>
+        <td><%= lat_long_from_address.city %></td>
+        <td><%= lat_long_from_address.state %></td>
+        <td><%= lat_long_from_address.zip %></td>
+        <td><%= lat_long_from_address.lat %></td>
+        <td><%= lat_long_from_address.long %></td>
+        <td><%= lat_long_from_address.previously_looked_up %></td>
+        <td><%= lat_long_from_address.json_resp %></td>
+        <td><%= lat_long_from_address.display_address %></td>
+        <td><%= link_to 'Show', lat_long_from_address %></td>
+        <td><%= link_to 'Edit', edit_lat_long_from_address_path(lat_long_from_address) %></td>
+        <td><%= link_to 'Destroy', lat_long_from_address, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Lat Long From Address', new_lat_long_from_address_path %>

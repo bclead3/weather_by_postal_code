@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Address:</strong>
+  <%= @lat_long_from_address.address %>
+</p>
+
+<p>
+  <strong>City:</strong>
+  <%= @lat_long_from_address.city %>
+</p>
+
+<p>
+  <strong>State:</strong>
+  <%= @lat_long_from_address.state %>
+</p>
+
+<p>
+  <strong>Zip:</strong>
+  <%= @lat_long_from_address.zip %>
+</p>
+
+<p>
+  <strong>Lat:</strong>
+  <%= @lat_long_from_address.lat %>
+</p>
+
+<p>
+  <strong>Long:</strong>
+  <%= @lat_long_from_address.long %>
+</p>
+
+<p>
+  <strong>Previously looked up:</strong>
+  <%= @lat_long_from_address.previously_looked_up %>
+</p>
+
+<p>
+  <strong>Json resp:</strong>
+  <%= @lat_long_from_address.json_resp %>
+</p>
+
+<p>
+  <strong>Display address:</strong>
+  <%= @lat_long_from_address.display_address %>
+</p>
+
+<%= link_to 'Edit', edit_lat_long_from_address_path(@lat_long_from_address) %> |
+<%= link_to 'Back', lat_long_from_addresses_path %>
