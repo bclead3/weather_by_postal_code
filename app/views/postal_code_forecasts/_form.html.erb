@@ -1,0 +1,27 @@
+<%= form_with(model: postal_code_forecast) do |form| %>
+  <% if postal_code_forecast.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(postal_code_forecast.errors.count, "error") %> prohibited this postal_code_forecast from being saved:</h2>
+
+      <ul>
+        <% postal_code_forecast.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :postal_code %>
+    <%= form.text_field :postal_code %>
+  </div>
+
+  <div class="field">
+    <%= form.label :time_of_last_request %>
+    <%= form.datetime_select :time_of_last_request %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

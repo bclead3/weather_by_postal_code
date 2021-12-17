@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Postal code:</strong>
+  <%= @postal_code_forecast.postal_code %>
+</p>
+
+<p>
+  <strong>Time of last request:</strong>
+  <%= @postal_code_forecast.time_of_last_request %>
+</p>
+
+<%= link_to 'Edit', edit_postal_code_forecast_path(@postal_code_forecast) %> |
+<%= link_to 'Back', postal_code_forecasts_path %>

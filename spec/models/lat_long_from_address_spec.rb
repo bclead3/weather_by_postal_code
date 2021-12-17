@@ -61,6 +61,10 @@ RSpec.describe LatLongFromAddress, type: :model do
       expect(lat_long_from_address.previously_looked_up).to be_truthy
       expect(lat_long_from_address.json_resp.keys).to eq(%w[place_id licence osm_type osm_id boundingbox lat lon display_name class type importance address])
     end
+
+    it 'generates an associated PostalCodeForecast association' do
+
+    end
   end
 
   describe '#zip_code' do

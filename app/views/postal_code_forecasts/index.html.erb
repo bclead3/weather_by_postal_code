@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Postal Code Forecasts</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Postal code</th>
+      <th>Time of last request</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @postal_code_forecasts.each do |postal_code_forecast| %>
+      <tr>
+        <td><%= postal_code_forecast.postal_code %></td>
+        <td><%= postal_code_forecast.time_of_last_request %></td>
+        <td><%= link_to 'Show', postal_code_forecast %></td>
+        <td><%= link_to 'Edit', edit_postal_code_forecast_path(postal_code_forecast) %></td>
+        <td><%= link_to 'Destroy', postal_code_forecast, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Postal Code Forecast', new_postal_code_forecast_path %>
