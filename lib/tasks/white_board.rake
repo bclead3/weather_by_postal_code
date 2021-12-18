@@ -2,78 +2,107 @@
 desc 'test out ideas here'
 
 namespace :white_board do
-  task test_ideas: :environment do
-    require 'httparty'
+  # task test_ideas: :environment do
+  #   require 'httparty'
+  #
+  #   user_agent = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Mobile Safari/537.36"
+  #
+  #   address = '1610 Pennsylvania Ave'
+  #   city = 'Saint Louis Park'
+  #   lat_long_obj = LatLongFromAddress.find_or_create_by(address: address, city: city)
+  #   postal_code_forecast = lat_long_obj.populate
+  #
+  #   lat = lat_long_obj.lat.to_f.round(4).to_s
+  #   long = lat_long_obj.long.to_f.round(4).to_s
+  #   postal_code = postal_code_forecast.postal_code
+  #   puts "The lat:#{lat} long:#{long} of #{address} #{city}"
+  #   puts "PostalCodeForecast"
+  #   pp postal_code_forecast.to_s
+  #
+  #   uri = URI.parse("https://api.weather.gov/points/#{lat},#{long}")
+  #   response = Net::HTTP.get(uri)
+  #   json_resp = JSON.parse(response)
+  #   grid_id = json_resp['properties']['gridId']
+  #   grid_y = json_resp['properties']['gridY']
+  #   grid_x = json_resp['properties']['gridX']
+  #   postal_code_forecast.update(grid_id: grid_id, grid_x: grid_x, grid_y: grid_y)
+  #   puts "gridId:#{grid_id}\tgridY:#{grid_y}\tgridX:#{grid_x}\tpostalCode:#{postal_code}"
+  #   uri_forecast = json_resp['properties']['forecast']
+  #   postal_code_forecast.update(station_url: uri_forecast)
+  #   puts "forecast URL:#{uri_forecast}"
+  #   uri_forecast_hourly = json_resp['properties']['forecastHourly']
+  #   puts "hourly   URL:#{uri_forecast_hourly}"
+  #
+  #   page = HTTParty.get(uri_forecast)
+  #   json_forecast_resp = JSON.parse(page.body)
+  #   json_forecast_resp['properties']['periods'].each_with_index do |period_json, period_index|
+  #     puts period_index+1
+  #     period_json['postal_code'] = postal_code
+  #     period_json.delete('number')
+  #     period_json.delete('temperatureTrend')
+  #     period_json = period_json.transform_keys{ |key| key.underscore }
+  #     period_json = period_json.transform_keys{ |key| key == 'name' ? key = 'period_name' : key }
+  #     period_json = period_json.transform_keys{ |key| key == 'icon' ? key = 'icon_url' : key }
+  #     forecast_period = ForecastPeriod.find_or_create_by(postal_code: postal_code, start_time: period_json['start_time'], end_time: period_json['end_time'])
+  #     forecast_period.update(period_json)
+  #     pp forecast_period.inspect
+  #   end
+  #   puts
+  #   puts "*** Hourly ***"
+  #   puts
+  #   page = HTTParty.get(uri_forecast_hourly)
+  #   json_hourly_resp = JSON.parse(page.body)
+  #   json_hourly_resp['properties']['periods'].each_with_index do |period_json, period_index|
+  #     puts period_index+1
+  #     period_json['postal_code'] = postal_code
+  #     period_json.delete('number')
+  #     period_json.delete('temperatureTrend')
+  #     period_json = period_json.transform_keys{ |key| key.underscore }
+  #     period_json = period_json.transform_keys{ |key| key == 'name' ? key = 'period_name' : key }
+  #     period_json = period_json.transform_keys{ |key| key == 'icon' ? key = 'icon_url' : key }
+  #     forecast_period = ForecastPeriod.find_or_create_by(postal_code: postal_code, start_time: period_json['start_time'], end_time: period_json['end_time'])
+  #     forecast_period.update(period_json)
+  #     pp forecast_period.inspect
+  #   end
+  #   cache_hash = HashWithIndifferentAccess.new
+  #   cache_hash[:postal_code] = postal_code
+  #   cache_hash[:periods] = []
+  #   ForecastPeriod.where(postal_code: postal_code).order(:start_time).each do |record|
+  #     cache_hash[:periods] << JSON.parse(record.to_json)
+  #   end
+  #   pp cache_hash
+  #   postal_code_forecast.forecast_cache = cache_hash
+  #   postal_code_forecast.time_of_last_request = DateTime.now
+  #   postal_code_forecast.save
+  # end
 
-    user_agent = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Mobile Safari/537.36"
+  task test_more_ideas: :environment do
+    require 'assets/web/web_station_request'
+    require 'assets/web/web_forecast_request'
 
     address = '1610 Pennsylvania Ave'
     city = 'Saint Louis Park'
+
     lat_long_obj = LatLongFromAddress.find_or_create_by(address: address, city: city)
     postal_code_forecast = lat_long_obj.populate
+    lat = lat_long_obj.lat
+    long = lat_long_obj.long
 
-    lat = lat_long_obj.lat.to_f.round(4).to_s
-    long = lat_long_obj.long.to_f.round(4).to_s
-    postal_code = postal_code_forecast.postal_code
-    puts "The lat:#{lat} long:#{long} of #{address} #{city}"
-    puts "PostalCodeForecast"
-    pp postal_code_forecast.to_s
+    station_obj = Assets::Web::WebStationRequest.new
+    station_hash = station_obj.request_weather_station(lat, long)
 
-    uri = URI.parse("https://api.weather.gov/points/#{lat},#{long}")
-    response = Net::HTTP.get(uri)
-    json_resp = JSON.parse(response)
-    grid_id = json_resp['properties']['gridId']
-    grid_y = json_resp['properties']['gridY']
-    grid_x = json_resp['properties']['gridX']
-    postal_code_forecast.update(grid_id: grid_id, grid_x: grid_x, grid_y: grid_y)
-    puts "gridId:#{grid_id}\tgridY:#{grid_y}\tgridX:#{grid_x}\tpostalCode:#{postal_code}"
-    uri_forecast = json_resp['properties']['forecast']
-    postal_code_forecast.update(station_url: uri_forecast)
-    puts "forecast URL:#{uri_forecast}"
-    uri_forecast_hourly = json_resp['properties']['forecastHourly']
-    puts "hourly   URL:#{uri_forecast_hourly}"
+    forecast_obj = Assets::Web::WebForecastRequest.new
+    nugget_hash = forecast_obj.parse_nuggets_from_json_resp(station_hash)
+    # pp nugget_hash
+    forecast_obj.update_postal_code_forecast(nugget_hash, postal_code_forecast)
 
-    page = HTTParty.get(uri_forecast)
-    json_forecast_resp = JSON.parse(page.body)
-    json_forecast_resp['properties']['periods'].each_with_index do |period_json, period_index|
-      puts period_index+1
-      period_json['postal_code'] = postal_code
-      period_json.delete('number')
-      period_json.delete('temperatureTrend')
-      period_json = period_json.transform_keys{ |key| key.underscore }
-      period_json = period_json.transform_keys{ |key| key == 'name' ? key = 'period_name' : key }
-      period_json = period_json.transform_keys{ |key| key == 'icon' ? key = 'icon_url' : key }
-      forecast_period = ForecastPeriod.find_or_create_by(postal_code: postal_code, start_time: period_json['start_time'], end_time: period_json['end_time'])
-      forecast_period.update(period_json)
-      pp forecast_period.inspect
-    end
-    puts
-    puts "*** Hourly ***"
-    puts
-    page = HTTParty.get(uri_forecast_hourly)
-    json_hourly_resp = JSON.parse(page.body)
-    json_hourly_resp['properties']['periods'].each_with_index do |period_json, period_index|
-      puts period_index+1
-      period_json['postal_code'] = postal_code
-      period_json.delete('number')
-      period_json.delete('temperatureTrend')
-      period_json = period_json.transform_keys{ |key| key.underscore }
-      period_json = period_json.transform_keys{ |key| key == 'name' ? key = 'period_name' : key }
-      period_json = period_json.transform_keys{ |key| key == 'icon' ? key = 'icon_url' : key }
-      forecast_period = ForecastPeriod.find_or_create_by(postal_code: postal_code, start_time: period_json['start_time'], end_time: period_json['end_time'])
-      forecast_period.update(period_json)
-      pp forecast_period.inspect
-    end
-    cache_hash = HashWithIndifferentAccess.new
-    cache_hash[:postal_code] = postal_code
-    cache_hash[:periods] = []
-    ForecastPeriod.where(postal_code: postal_code).order(:start_time).each do |record|
-      cache_hash[:periods] << JSON.parse(record.to_json)
-    end
-    pp cache_hash
-    postal_code_forecast.forecast_cache = cache_hash
-    postal_code_forecast.time_of_last_request = DateTime.now
-    postal_code_forecast.save
+    forecast_obj.create_forecast_periods(nugget_hash[:forecast_url], postal_code_forecast.postal_code)
+    forecast_obj.create_forecast_periods(nugget_hash[:hourly_url], postal_code_forecast.postal_code)
+
+    cache_hash = forecast_obj.create_cache(postal_code_forecast.postal_code)
+    # pp cache_hash
+
+    forecast_obj.update_postal_code_forecast_two(postal_code_forecast, cache_hash)
   end
 end
 
