@@ -1,6 +1,7 @@
 
 class PostalCodeForecast < ApplicationRecord
-  has_many :lat_long_from_address
+  has_many :lat_long_from_addresses
+  has_many :forecast_periods
 
   CACHE_MINUTE_LIMIT = 30
 

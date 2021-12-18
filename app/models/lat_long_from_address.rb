@@ -4,6 +4,7 @@ class LatLongFromAddress < ApplicationRecord
   include WebAddressRequest
 
   #belongs_to :postal_code_forecast, foreign_key: :postal_code
+  scope :postal_code_forecast, -> { PostalCodeForecast.find_by(self.postal_code) }
 
   validates :address, presence: true
   validates :city, presence: true
@@ -55,17 +56,14 @@ class LatLongFromAddress < ApplicationRecord
       end
     end
 
+    postal_code_forecast = nil
     postal_code_forecast = PostalCodeForecast.find_or_create_by(postal_code: self.postal_code) if self.postal_code
     if postal_code_forecast&.time_of_last_request.nil?
-      postal_code_forecast.update(time_of_last_request: DateTime.now)
+      postal_code_forecast&.update(time_of_last_request: DateTime.now)
     end
     postal_code_forecast
   rescue StandardError => std_err
     puts "Standard Error msg:#{std_err.message}"
-  end
-
-  def postal_code_forecast
-    PostalCodeForecast.find_by(postal_code: self.postal_code)
   end
 end
 

@@ -10,7 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_18_045554) do
+ActiveRecord::Schema.define(version: 2021_12_18_060249) do
+
+  create_table "forecast_periods", force: :cascade do |t|
+    t.string "postal_code"
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.string "period_name"
+    t.boolean "is_daytime"
+    t.float "temperature"
+    t.string "temperature_unit", default: "F"
+    t.float "wind_speed"
+    t.string "wind_direction"
+    t.string "icon_url"
+    t.string "short_forecast"
+    t.string "detailed_forecast"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "lat_long_from_addresses", force: :cascade do |t|
     t.string "address"
@@ -36,6 +53,10 @@ ActiveRecord::Schema.define(version: 2021_12_18_045554) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.json "forecast_cache"
+    t.string "grid_id"
+    t.integer "grid_x"
+    t.integer "grid_y"
+    t.string "station_url"
   end
 
 end

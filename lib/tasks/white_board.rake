@@ -10,26 +10,88 @@ namespace :white_board do
     address = '1610 Pennsylvania Ave'
     city = 'Saint Louis Park'
     lat_long_obj = LatLongFromAddress.find_or_create_by(address: address, city: city)
-    lat_long_obj.populate unless lat_long_obj.previously_looked_up
+    postal_code_forecast = lat_long_obj.populate
 
     lat = lat_long_obj.lat.to_f.round(4).to_s
     long = lat_long_obj.long.to_f.round(4).to_s
-
+    postal_code = postal_code_forecast.postal_code
     puts "The lat:#{lat} long:#{long} of #{address} #{city}"
+    puts "PostalCodeForecast"
+    pp postal_code_forecast.to_s
 
     uri = URI.parse("https://api.weather.gov/points/#{lat},#{long}")
     response = Net::HTTP.get(uri)
     json_resp = JSON.parse(response)
+    grid_id = json_resp['properties']['gridId']
+    grid_y = json_resp['properties']['gridY']
+    grid_x = json_resp['properties']['gridX']
+    postal_code_forecast.update(grid_id: grid_id, grid_x: grid_x, grid_y: grid_y)
+    puts "gridId:#{grid_id}\tgridY:#{grid_y}\tgridX:#{grid_x}\tpostalCode:#{postal_code}"
     uri_forecast = json_resp['properties']['forecast']
+    postal_code_forecast.update(station_url: uri_forecast)
+    puts "forecast URL:#{uri_forecast}"
     uri_forecast_hourly = json_resp['properties']['forecastHourly']
+    puts "hourly   URL:#{uri_forecast_hourly}"
 
     page = HTTParty.get(uri_forecast)
-    json_resp = JSON.parse(page)
-    pp json_resp
+    json_forecast_resp = JSON.parse(page.body)
+    json_forecast_resp['properties']['periods'].each_with_index do |period_json, period_index|
+      puts period_index+1
+      period_json['postal_code'] = postal_code
+      period_json.delete('number')
+      period_json.delete('temperatureTrend')
+      period_json = period_json.transform_keys{ |key| key.underscore }
+      period_json = period_json.transform_keys{ |key| key == 'name' ? key = 'period_name' : key }
+      period_json = period_json.transform_keys{ |key| key == 'icon' ? key = 'icon_url' : key }
+      forecast_period = ForecastPeriod.find_or_create_by(postal_code: postal_code, start_time: period_json['start_time'], end_time: period_json['end_time'])
+      forecast_period.update(period_json)
+      pp forecast_period.inspect
+    end
+    puts
+    puts "*** Hourly ***"
+    puts
+    page = HTTParty.get(uri_forecast_hourly)
+    json_hourly_resp = JSON.parse(page.body)
+    json_hourly_resp['properties']['periods'].each_with_index do |period_json, period_index|
+      puts period_index+1
+      period_json['postal_code'] = postal_code
+      period_json.delete('number')
+      period_json.delete('temperatureTrend')
+      period_json = period_json.transform_keys{ |key| key.underscore }
+      period_json = period_json.transform_keys{ |key| key == 'name' ? key = 'period_name' : key }
+      period_json = period_json.transform_keys{ |key| key == 'icon' ? key = 'icon_url' : key }
+      forecast_period = ForecastPeriod.find_or_create_by(postal_code: postal_code, start_time: period_json['start_time'], end_time: period_json['end_time'])
+      forecast_period.update(period_json)
+      pp forecast_period.inspect
+    end
+    cache_hash = HashWithIndifferentAccess.new
+    cache_hash[:postal_code] = postal_code
+    cache_hash[:periods] = []
+    ForecastPeriod.where(postal_code: postal_code).order(:start_time).each do |record|
+      cache_hash[:periods] << JSON.parse(record.to_json)
+    end
+    pp cache_hash
+    postal_code_forecast.forecast_cache = cache_hash
+    postal_code_forecast.time_of_last_request = DateTime.now
+    postal_code_forecast.save
   end
 end
 
-
+# {"number"=>1,
+#  "name"=>"Overnight",
+#  "startTime"=>"2021-12-18T00:00:00-06:00",
+#  "endTime"=>"2021-12-18T06:00:00-06:00",
+#  "isDaytime"=>false,
+#  "temperature"=>15,
+#  "temperatureUnit"=>"F",
+#  "temperatureTrend"=>nil,
+#  "windSpeed"=>"5 mph",
+#  "windDirection"=>"NNE",
+#  "icon"=>"https://api.weather.gov/icons/land/night/snow,80?size=medium",
+#  "shortForecast"=>"Light Snow",
+#  "detailedForecast"=>
+#   "Snow after 1am. Cloudy, with a low around 15. North northeast wind around 5 mph. Chance of precipitation is 80%. New snow accumulation of less than one inch possible."}
+#
 
 # @context
 # id
