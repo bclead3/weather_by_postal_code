@@ -45,3 +45,5 @@ white_board_two.rb
 .idea
 /.idea/*
 /.idea/weather_by_zip.iml
+/coverage/*
+

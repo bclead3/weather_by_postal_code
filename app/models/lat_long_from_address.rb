@@ -3,8 +3,7 @@ require 'httparty'
 class LatLongFromAddress < ApplicationRecord
   include WebAddressRequest
 
-  #belongs_to :postal_code_forecast, foreign_key: :postal_code
-  scope :postal_code_forecast, -> { PostalCodeForecast.find_by(self.postal_code) }
+  scope :postal_code_forecast, -> { PostalCodeForecast.find_by(self.postal_code) } # belongs_to :postal_code_forecast, foreign_key: :postal_code
 
   validates :address, presence: true
   validates :city, presence: true
