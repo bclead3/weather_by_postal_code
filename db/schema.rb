@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_17_052749) do
+ActiveRecord::Schema.define(version: 2021_12_18_045554) do
 
   create_table "lat_long_from_addresses", force: :cascade do |t|
     t.string "address"
@@ -28,6 +28,14 @@ ActiveRecord::Schema.define(version: 2021_12_17_052749) do
     t.string "display_address"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "postal_code_forecasts", force: :cascade do |t|
+    t.string "postal_code"
+    t.datetime "time_of_last_request"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.json "forecast_cache"
   end
 
 end

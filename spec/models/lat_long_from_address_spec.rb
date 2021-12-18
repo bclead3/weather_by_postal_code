@@ -7,7 +7,8 @@ RSpec.describe LatLongFromAddress, type: :model do
 
   describe 'instantiation' do
     it 'works with valid attributes' do
-      lat_long_from_address = LatLongFromAddress.create! valid_attributes
+      lat_long_from_address = LatLongFromAddress.create valid_attributes
+      puts lat_long_from_address.errors.errors.inspect
       expect(lat_long_from_address.address).to eq('821 Marquette Avenue')
       expect(lat_long_from_address.city).to eq('Minneapolis')
       expect(lat_long_from_address.state).to eq('MN')
@@ -65,6 +66,8 @@ RSpec.describe LatLongFromAddress, type: :model do
 
   describe '#zip_code' do
     let(:attributes) { { address: 'One Guest Street', city: 'Boston', state: 'MA', zip: '02135' } } # WGBH Boston
+    let(:bogus_attrs) { { address: 'The Bogus Addr', city: 'Bangor', zip: '01034-1234', country: 'United States'} }
+    let(:bogus_attrs_two) { { address: 'The Bogus Addr', city: 'Bangor', zip: '010341234', country: 'United States'} }
 
     it 'displays 2135 for zip, 02135 for zip_code' do
       lat_long_from_address = LatLongFromAddress.create(attributes)
@@ -73,6 +76,16 @@ RSpec.describe LatLongFromAddress, type: :model do
       expect(lat_long_from_address.state).to eq('MA')
       expect(lat_long_from_address.zip).to eq(2135)
       expect(lat_long_from_address.zip_code).to eq('02135')
+    end
+
+    it 'displays a zip+4 with only five digits' do
+      lat_long_from_address = LatLongFromAddress.new(bogus_attrs)
+      expect(lat_long_from_address.zip).to eq(1034)
+      expect(lat_long_from_address.zip_code).to eq('01034')
+
+      lat_long_from_address = LatLongFromAddress.new(bogus_attrs_two)
+      #expect(lat_long_from_address.zip).to eq(1034)
+      expect(lat_long_from_address.zip_code).to eq('01034')
     end
   end
 

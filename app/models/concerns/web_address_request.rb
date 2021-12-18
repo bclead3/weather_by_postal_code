@@ -1,3 +1,5 @@
+require 'httparty'
+
 module WebAddressRequest
 
   def request_address(address_string, city = nil, state = nil, zip = nil)
@@ -23,7 +25,9 @@ module WebAddressRequest
     }
 
     uri.query = URI.encode_www_form( params )
-    response = Net::HTTP.get(uri)
+    response = HTTParty.get(uri)
+
+    response.body
   rescue StandardError => std_err
     std_err.message
   end

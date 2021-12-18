@@ -1,6 +1,9 @@
+require 'httparty'
 
 class LatLongFromAddress < ApplicationRecord
   include WebAddressRequest
+
+  #belongs_to :postal_code_forecast, foreign_key: :postal_code
 
   validates :address, presence: true
   validates :city, presence: true
@@ -14,32 +17,55 @@ class LatLongFromAddress < ApplicationRecord
   end
 
   def zip_code
-    "%05d" % zip.to_i
+    working_zip = zip.to_s.gsub('-', '').gsub(' ', '').gsub('_', '')
+    if working_zip.length > 5 &&
+       working_zip.length < 10 &&
+       country == 'United States'
+      final_four_digits = working_zip[-4..-1] # remove the last four
+      working_zip = working_zip.gsub(final_four_digits, '')
+      "%05d" % working_zip.to_i
+    elsif zip.to_s.length == 5
+      postal_code[0..4]
+    else
+      "%05d" % zip.to_i
+    end
   end
 
   def populate
-    resp = issue_request(full_address)
-    json_resp = JSON.parse(resp)
-    json_resp = json_resp.first if json_resp.is_a?(Array)
-    if json_resp
-      self.json_resp = json_resp
-      self.source_place_id = json_resp['place_id']
-      self.lat = json_resp['lat']
-      self.long = json_resp['lon']
-      self.previously_looked_up = true
-      self.display_address = json_resp['display_name']
-      if json_resp['address']
-        self.city = json_resp['address']['city']
-        self.county = json_resp['address']['county']
-        self.state = json_resp['address']['state']
-        self.postal_code = json_resp['address']['postcode']
-        self.country = json_resp['address']['country']
-        self.zip = json_resp['address']['postcode'] if country == 'United States'
+    unless self.previously_looked_up
+      resp = issue_request(full_address)
+      json_resp = JSON.parse(resp)
+      json_resp = json_resp.first if json_resp.is_a?(Array)
+      if json_resp
+        self.json_resp = json_resp
+        self.source_place_id = json_resp['place_id']
+        self.lat = json_resp['lat']
+        self.long = json_resp['lon']
+        self.previously_looked_up = true
+        self.display_address = json_resp['display_name']
+        if json_resp['address']
+          self.city = json_resp['address']['city']
+          self.county = json_resp['address']['county']
+          self.state = json_resp['address']['state']
+          self.postal_code = json_resp['address']['postcode']
+          self.country = json_resp['address']['country']
+          self.zip = json_resp['address']['postcode'] if country == 'United States'
+        end
+        save
       end
-      save
     end
+
+    postal_code_forecast = PostalCodeForecast.find_or_create_by(postal_code: self.postal_code) if self.postal_code
+    if postal_code_forecast&.time_of_last_request.nil?
+      postal_code_forecast.update(time_of_last_request: DateTime.now)
+    end
+    postal_code_forecast
   rescue StandardError => std_err
     puts "Standard Error msg:#{std_err.message}"
+  end
+
+  def postal_code_forecast
+    PostalCodeForecast.find_by(postal_code: self.postal_code)
   end
 end
 

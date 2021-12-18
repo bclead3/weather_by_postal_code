@@ -1,3 +1,5 @@
+require 'httparty'
+
 module Assets
   module Web
 
@@ -28,7 +30,7 @@ module Assets
         }
 
         uri.query = URI.encode_www_form( params )
-        response = Net::HTTP.get(uri)
+        response = HTTParty.get(uri)
       rescue StandardError => std_err
         std_err.message
       end

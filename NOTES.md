@@ -56,6 +56,10 @@
 * https://www.rubyguides.com/2019/02/ruby-io/
 * https://thoughtbot.com/blog/rubys-argf
 * https://stackoverflow.com/questions/14824551/rendering-json-in-controller
+* https://www.bigbinary.com/learn-rubyonrails-book/setting-up-rake-tasks
+* https://docs.github.com/en/github/importing-your-projects-to-github/importing-source-code-to-github/adding-an-existing-project-to-github-using-the-command-line
+* https://unix.stackexchange.com/questions/29608/why-is-it-better-to-use-usr-bin-env-name-instead-of-path-to-name-as-my
+* https://github.com/travisjeffery/timecop
 
 
 #### Markdown Syntax
