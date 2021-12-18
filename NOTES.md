@@ -61,6 +61,7 @@
 * https://unix.stackexchange.com/questions/29608/why-is-it-better-to-use-usr-bin-env-name-instead-of-path-to-name-as-my
 * https://github.com/travisjeffery/timecop
 * https://stackoverflow.com/questions/8706930/converting-nested-hash-keys-from-camelcase-to-snake-case-in-ruby
+* https://stackoverflow.com/questions/11451535/gitignore-is-ignored-by-git
 
 
 #### Markdown Syntax

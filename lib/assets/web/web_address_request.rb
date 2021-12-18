@@ -2,7 +2,6 @@ require 'httparty'
 
 module Assets
   module Web
-
     class WebAddressRequest
 
       def request_address(address_string, city = nil, state = nil, zip = nil)
@@ -19,8 +18,8 @@ module Assets
 
       private
 
-      def issue_request(full_address)
-        encoded_address = build_address.gsub(' ', '+')
+      def issue_request(enough_address)
+        encoded_address = enough_address.gsub(' ', '+')
         uri = URI.parse('https://nominatim.openstreetmap.org/search')
         params = {
           q: encoded_address,
@@ -31,6 +30,7 @@ module Assets
 
         uri.query = URI.encode_www_form( params )
         response = HTTParty.get(uri)
+        JSON.parse(response.body)
       rescue StandardError => std_err
         std_err.message
       end

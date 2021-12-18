@@ -18,5 +18,6 @@ module WeatherByZip
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    Dir["#{Rails.root}/lib/assets/**/*.rb"].each { |file| require file }
   end
 end

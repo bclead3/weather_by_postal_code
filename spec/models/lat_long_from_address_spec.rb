@@ -46,7 +46,39 @@ RSpec.describe LatLongFromAddress, type: :model do
   end
 
   describe '#populate' do
+    let(:hash) do
+        [
+          {"place_id"=>324648326,
+           "licence"=>"Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+           "osm_type"=>"way",
+           "osm_id"=>6027555,
+           "boundingbox"=>["44.9772805", "44.979212", "-93.2700841", "-93.26845"],
+           "lat"=>"44.9782466",
+           "lon"=>"-93.2692576",
+           "display_name"=>"Marquette Avenue South, Minneapolis, Hennepin County, Minnesota, 55401, United States",
+           "class"=>"highway",
+           "type"=>"tertiary",
+           "importance"=>0.41000000000000003,
+           "address"=>{
+             "road"=>"Marquette Avenue South",
+             "city"=>"Minneapolis",
+             "county"=>"Hennepin County",
+             "state"=>"Minnesota",
+             "postcode"=>"55401",
+             "country"=>"United States",
+             "country_code"=>"us"}
+          }
+        ]
+        end
     it 'works on minimal attributes' do
+      stub_request(:get, "https://nominatim.openstreetmap.org/search?addressdetails=1&format=json&polygon=1&q=821%2BMarquette%2BAvenue,%2BMinneapolis").
+        with(
+          headers: {
+            'Accept'=>'*/*',
+            'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+            'User-Agent'=>'Ruby'
+          }).
+        to_return(status: 200, body: hash.to_json, headers: {})
       lat_long_from_address = LatLongFromAddress.create(min_attributes)
       lat_long_from_address.populate
       expect(lat_long_from_address.address).to eq('821 Marquette Avenue')
