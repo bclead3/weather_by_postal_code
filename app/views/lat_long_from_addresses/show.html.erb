@@ -1,32 +1,17 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Address:</strong>
-  <%= @lat_long_from_address.address %>
+  <strong>Display address:</strong>
+  <%= @lat_long_from_address.display_address %>
 </p>
 
 <p>
-  <strong>City:</strong>
-  <%= @lat_long_from_address.city %>
-</p>
-
-<p>
-  <strong>State:</strong>
-  <%= @lat_long_from_address.state %>
-</p>
-
-<p>
-  <strong>Zip:</strong>
-  <%= @lat_long_from_address.zip %>
-</p>
-
-<p>
-  <strong>Lat:</strong>
+  <strong>Latitude:</strong>
   <%= @lat_long_from_address.lat %>
 </p>
 
 <p>
-  <strong>Long:</strong>
+  <strong>Longitude:</strong>
   <%= @lat_long_from_address.long %>
 </p>
 
@@ -35,15 +20,44 @@
   <%= @lat_long_from_address.previously_looked_up %>
 </p>
 
-<p>
-  <strong>Json resp:</strong>
-  <%= @lat_long_from_address.json_resp %>
-</p>
+<!--<p>-->
+<!--  <strong>Json resp:</strong>-->
+  <%#= @lat_long_from_address.json_resp %>
+<!--</p>-->
 
-<p>
-  <strong>Display address:</strong>
-  <%= @lat_long_from_address.display_address %>
-</p>
 
+
+
+<%- cache_hash = @postal_code_forecast&.forecast_cache %>
+<%- if cache_hash %>
+    <table>
+      <tr>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>Time Period</th>
+        <th>Daytime?</th>
+        <th>Temp</th>
+        <th>Icon</th>
+        <th>Forecast</th>
+      </tr>
+<%- cache_hash['periods'].each do |period_h| %>
+      <tr>
+        <td><%= period_h['start_time'].to_s %></td>
+        <td><%= period_h['end_time'].to_s %></td>
+        <td><%= period_h['period_name'] %></td>
+        <td><%= period_h['is_daytime'] %></td>
+        <td><%= period_h['temperature']%><%= period_h['temperature_unit'] %></td>
+        <td><img src='<%= period_h['icon_url'] %>'></td>
+        <td>
+        <%- if period_h['detailed_forecast'].empty? %>
+          <%= period_h['short_forecast'] %>
+        <% else %>
+          <%= period_h['detailed_forecast'] %>
+        <% end %>
+        </td>
+      </tr>
+<% end %>
+    </table>
+<% end %>
 <%= link_to 'Edit', edit_lat_long_from_address_path(@lat_long_from_address) %> |
 <%= link_to 'Back', lat_long_from_addresses_path %>

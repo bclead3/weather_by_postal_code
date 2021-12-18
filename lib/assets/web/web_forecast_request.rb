@@ -37,7 +37,7 @@ module Assets
           period_json = transform_json_keys(period_json, postal_code)
           forecast_period = ForecastPeriod.find_or_create_by(postal_code: postal_code, start_time: period_json['start_time'], end_time: period_json['end_time'])
           forecast_period.update(period_json)
-          pp forecast_period.inspect
+          # pp forecast_period.inspect
         end
       end
 
