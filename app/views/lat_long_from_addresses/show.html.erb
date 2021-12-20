@@ -44,8 +44,8 @@
 <%- cache_hash['periods'].each do |period_h| %>
       <tr>
         <td><img src='<%= period_h['icon_url'] %>'></td>
-        <td><%= DateTime.parse(period_h['start_time']).to_s %></td>
-        <td><%= DateTime.parse(period_h['end_time']).to_s %></td>
+        <td><%= format_time(period_h['start_time'], @postal_code_forecast.time_zone) %></td>
+        <td><%= format_time(period_h['end_time'], @postal_code_forecast.time_zone) %></td>
         <td><%= period_h['period_name'] %></td>
         <td><%= period_h['is_daytime'] %></td>
         <td><%= "#{period_h['temperature'].to_i.to_s} " %><%= period_h['temperature_unit'] %></td>
