@@ -4,9 +4,234 @@ RSpec.describe LatLongFromAddress, type: :model do
   let(:valid_attributes) { { address: '821 Marquette Avenue', city: 'Minneapolis', state: 'MN', zip: '55401'} } # Foshay Tower
   let(:min_attributes) { { address: '821 Marquette Avenue', city: 'Minneapolis' } }
   let(:invalid_attributes) { { address: '821 Marquette Avenue' } } # Foshay address only
+  let(:foshay_response_hash) do
+    [
+      {
+        "place_id": 324648326,
+        "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+        "osm_type": "way",
+        "osm_id": 6027555,
+        "boundingbox": [
+          "44.9772805",
+          "44.979212",
+          "-93.2700841",
+          "-93.26845"
+        ],
+        "lat": "44.9782466",
+        "lon": "-93.2692576",
+        "display_name": "Marquette Avenue South, Minneapolis, Hennepin County, Minnesota, 55401, United States",
+        "class": "highway",
+        "type": "tertiary",
+        "importance": 0.41000000000000003,
+        "address": {
+          "road": "Marquette Avenue South",
+          "city": "Minneapolis",
+          "county": "Hennepin County",
+          "state": "Minnesota",
+          "postcode": "55401",
+          "country": "United States",
+          "country_code": "us"
+        }
+      },
+      {
+        "place_id": 324648390,
+        "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+        "osm_type": "way",
+        "osm_id": 183245941,
+        "boundingbox": [
+          "44.9723851",
+          "44.9733984",
+          "-93.274123",
+          "-93.2733107"
+        ],
+        "lat": "44.9729038",
+        "lon": "-93.2736849",
+        "display_name": "Marquette Avenue South, Minneapolis, Hennepin County, Minnesota, 55401:55403, United States",
+        "class": "highway",
+        "type": "tertiary",
+        "importance": 0.41000000000000003,
+        "address": {
+          "road": "Marquette Avenue South",
+          "city": "Minneapolis",
+          "county": "Hennepin County",
+          "state": "Minnesota",
+          "postcode": "55401:55403",
+          "country": "United States",
+          "country_code": "us"
+        }
+      },
+      {
+        "place_id": 324416631,
+        "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+        "osm_type": "way",
+        "osm_id": 638053937,
+        "boundingbox": [
+          "44.971443",
+          "44.9721444",
+          "-93.274928",
+          "-93.2743287"
+        ],
+        "lat": "44.9715225",
+        "lon": "-93.2748601",
+        "display_name": "Marquette Avenue South, Minneapolis, Hennepin County, Minnesota, 55403, United States",
+        "class": "highway",
+        "type": "tertiary",
+        "importance": 0.41000000000000003,
+        "address": {
+          "road": "Marquette Avenue South",
+          "city": "Minneapolis",
+          "county": "Hennepin County",
+          "state": "Minnesota",
+          "postcode": "55403",
+          "country": "United States",
+          "country_code": "us"
+        }
+      },
+      {
+        "place_id": 324416641,
+        "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+        "osm_type": "way",
+        "osm_id": 863687223,
+        "boundingbox": [
+          "44.9705308",
+          "44.971443",
+          "-93.2756928",
+          "-93.274928"
+        ],
+        "lat": "44.9708475",
+        "lon": "-93.2754272",
+        "display_name": "Marquette Avenue South, Loring Park, Minneapolis, Hennepin County, Minnesota, 55403, United States",
+        "class": "highway",
+        "type": "tertiary",
+        "importance": 0.41000000000000003,
+        "address": {
+          "road": "Marquette Avenue South",
+          "neighbourhood": "Loring Park",
+          "city": "Minneapolis",
+          "county": "Hennepin County",
+          "state": "Minnesota",
+          "postcode": "55403",
+          "country": "United States",
+          "country_code": "us"
+        }
+      },
+      {
+        "place_id": 96081867,
+        "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+        "osm_type": "way",
+        "osm_id": 6003538,
+        "boundingbox": [
+          "44.9820972",
+          "44.9831362",
+          "-93.2660171",
+          "-93.2651282"
+        ],
+        "lat": "44.9827261",
+        "lon": "-93.2654776",
+        "display_name": "Marquette Avenue South, Minneapolis, Hennepin County, Minnesota, 55402, United States",
+        "class": "highway",
+        "type": "tertiary",
+        "importance": 0.41000000000000003,
+        "address": {
+          "road": "Marquette Avenue South",
+          "city": "Minneapolis",
+          "county": "Hennepin County",
+          "state": "Minnesota",
+          "postcode": "55402",
+          "country": "United States",
+          "country_code": "us"
+        }
+      },
+      {
+        "place_id": 67938119,
+        "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+        "osm_type": "node",
+        "osm_id": 6178628386,
+        "boundingbox": [
+          "44.9745048",
+          "44.9746048",
+          "-93.2721888",
+          "-93.2720888"
+        ],
+        "lat": "44.9745548",
+        "lon": "-93.2721388",
+        "display_name": "Manny's Steakhouse, 825, Marquette Avenue South, Minneapolis, Hennepin County, Minnesota, 55402, United States",
+        "class": "amenity",
+        "type": "restaurant",
+        "importance": 0.31100000000000005,
+        "icon": "https://nominatim.openstreetmap.org/ui/mapicons//food_restaurant.p.20.png",
+        "address": {
+          "amenity": "Manny's Steakhouse",
+          "house_number": "825",
+          "road": "Marquette Avenue South",
+          "city": "Minneapolis",
+          "county": "Hennepin County",
+          "state": "Minnesota",
+          "postcode": "55402",
+          "country": "United States",
+          "country_code": "us"
+        }
+      }
+    ]
+  end
+
+  let(:station_hash) do
+    {"@context"=>
+       ["https://geojson.org/geojson-ld/geojson-context.jsonld",
+        {"@version"=>"1.1",
+         "wx"=>"https://api.weather.gov/ontology#",
+         "s"=>"https://schema.org/",
+         "geo"=>"http://www.opengis.net/ont/geosparql#",
+         "unit"=>"http://codes.wmo.int/common/unit/",
+         "@vocab"=>"https://api.weather.gov/ontology#",
+         "geometry"=>{"@id"=>"s:GeoCoordinates", "@type"=>"geo:wktLiteral"},
+         "city"=>"s:addressLocality",
+         "state"=>"s:addressRegion",
+         "distance"=>{"@id"=>"s:Distance", "@type"=>"s:QuantitativeValue"},
+         "bearing"=>{"@type"=>"s:QuantitativeValue"},
+         "value"=>{"@id"=>"s:value"},
+         "unitCode"=>{"@id"=>"s:unitCode", "@type"=>"@id"},
+         "forecastOffice"=>{"@type"=>"@id"},
+         "forecastGridData"=>{"@type"=>"@id"},
+         "publicZone"=>{"@type"=>"@id"},
+         "county"=>{"@type"=>"@id"}}],
+     "id"=>"https://api.weather.gov/points/44.9782,-93.2693",
+     "type"=>"Feature",
+     "geometry"=>{"type"=>"Point", "coordinates"=>[-93.2693, 44.9782]},
+     "properties"=>
+       {"@id"=>"https://api.weather.gov/points/44.9782,-93.2693",
+        "@type"=>"wx:Point",
+        "cwa"=>"MPX",
+        "forecastOffice"=>"https://api.weather.gov/offices/MPX",
+        "gridId"=>"MPX",
+        "gridX"=>107,
+        "gridY"=>71,
+        "forecast"=>"https://api.weather.gov/gridpoints/MPX/107,71/forecast",
+        "forecastHourly"=>"https://api.weather.gov/gridpoints/MPX/107,71/forecast/hourly",
+        "forecastGridData"=>"https://api.weather.gov/gridpoints/MPX/107,71",
+        "observationStations"=>"https://api.weather.gov/gridpoints/MPX/107,71/stations",
+        "relativeLocation"=>
+          {"type"=>"Feature",
+           "geometry"=>{"type"=>"Point", "coordinates"=>[-93.26832, 44.963324]},
+           "properties"=>{"city"=>"Minneapolis", "state"=>"MN", "distance"=>{"unitCode"=>"wmoUnit:m", "value"=>1655.9336213929}, "bearing"=>{"unitCode"=>"wmoUnit:degree_(angle)", "value"=>357}}},
+        "forecastZone"=>"https://api.weather.gov/zones/forecast/MNZ060",
+        "county"=>"https://api.weather.gov/zones/county/MNC053",
+        "fireWeatherZone"=>"https://api.weather.gov/zones/fire/MNZ060",
+        "timeZone"=>"America/Chicago",
+        "radarStation"=>"KMPX"}}
+  end
 
   describe 'instantiation' do
     it 'works with valid attributes' do
+      stub_request(:get, "https://api.weather.gov/points/44.9782,-93.2693").
+        with(
+          headers: {
+            'Accept'=>'*/*',
+            'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+            'User-Agent'=>'Ruby'
+          }).
+        to_return(status: 200, body: station_hash.to_json, headers: {})
+
       lat_long_from_address = LatLongFromAddress.create valid_attributes
       puts lat_long_from_address.errors.errors.inspect
       expect(lat_long_from_address.address).to eq('821 Marquette Avenue')
@@ -33,7 +258,17 @@ RSpec.describe LatLongFromAddress, type: :model do
   end
 
   describe '#full_address' do
+
     it 'prints address and city' do
+      stub_request(:get, "https://nominatim.openstreetmap.org/search?addressdetails=1&format=json&polygon=1&q=821+Marquette+Avenue,Minneapolis").
+        with(
+          headers: {
+            'Accept'=>'*/*',
+            'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+            'User-Agent'=>'Ruby'
+          }).
+        to_return(status: 200, body: foshay_response_hash.to_json, headers: {})
+
       lat_long_from_address = LatLongFromAddress.create! min_attributes
       expect(lat_long_from_address.full_address).to eq('821 Marquette Avenue, Minneapolis')
     end

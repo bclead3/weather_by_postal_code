@@ -30,24 +30,25 @@
 
 <%- cache_hash = @postal_code_forecast&.forecast_cache %>
 <%- if cache_hash %>
+  <%= format_month_date(cache_hash['periods'].first['start_time']) %>
     <table>
       <tr>
+        <th>Icon</th>
         <th>Start Time</th>
         <th>End Time</th>
         <th>Time Period</th>
         <th>Daytime?</th>
         <th>Temp</th>
-        <th>Icon</th>
         <th>Forecast</th>
       </tr>
 <%- cache_hash['periods'].each do |period_h| %>
       <tr>
-        <td><%= period_h['start_time'].to_s %></td>
-        <td><%= period_h['end_time'].to_s %></td>
+        <td><img src='<%= period_h['icon_url'] %>'></td>
+        <td><%= DateTime.parse(period_h['start_time']).to_s %></td>
+        <td><%= DateTime.parse(period_h['end_time']).to_s %></td>
         <td><%= period_h['period_name'] %></td>
         <td><%= period_h['is_daytime'] %></td>
-        <td><%= period_h['temperature']%><%= period_h['temperature_unit'] %></td>
-        <td><img src='<%= period_h['icon_url'] %>'></td>
+        <td><%= "#{period_h['temperature'].to_i.to_s} " %><%= period_h['temperature_unit'] %></td>
         <td>
         <%- if period_h['detailed_forecast'].empty? %>
           <%= period_h['short_forecast'] %>

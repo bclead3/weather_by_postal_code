@@ -6,7 +6,7 @@ require 'byebug'
 
 describe Assets::Web::WebForecastRequest do
   let(:subject) { Assets::Web::WebForecastRequest.new }
-  let(:json_response) do
+  let(:station_hash) do
     {"@context"=>
        ["https://geojson.org/geojson-ld/geojson-context.jsonld",
         {"@version"=>"1.1",
@@ -53,13 +53,14 @@ describe Assets::Web::WebForecastRequest do
   end
   describe '#parse_nuggets_from_json_resp' do
     it 'works when appropriate JSON is passed in' do
-      out_hash = subject.parse_nuggets_from_json_resp(json_response)
+      out_hash = subject.parse_nuggets_from_json_resp(station_hash)
       expected_hash = {
                         'forecast_url'=>'https://api.weather.gov/gridpoints/MPX/107,71/forecast',
                         'grid_id'=>'MPX',
                         'grid_x'=>107,
                         'grid_y'=>71,
-                        'hourly_url'=>'https://api.weather.gov/gridpoints/MPX/107,71/forecast/hourly'
+                        'hourly_url'=>'https://api.weather.gov/gridpoints/MPX/107,71/forecast/hourly',
+                        "time_zone" => "America/Chicago"
                       }
       expect(out_hash).to eq(expected_hash)
     end

@@ -11,6 +11,7 @@ module Assets
         grid_x = json_resp['properties']['gridX']
         forecast_url = json_resp['properties']['forecast']
         uri_forecast_hourly = json_resp['properties']['forecastHourly']
+        time_zone = json_resp['properties']['timeZone']
 
         out_hash = HashWithIndifferentAccess.new
         out_hash[:grid_id] = grid_id
@@ -18,6 +19,7 @@ module Assets
         out_hash[:grid_y] =  grid_y
         out_hash[:forecast_url] = forecast_url
         out_hash[:hourly_url] = uri_forecast_hourly
+        out_hash[:time_zone] = time_zone
         out_hash
       end
 
@@ -26,7 +28,13 @@ module Assets
         grid_x  = mini_json['grid_x']
         grid_y  = mini_json['grid_y']
         forecast_url = mini_json['forecast_url']
-        postal_code_forecast.update(grid_id: grid_id, grid_x: grid_x, grid_y: grid_y, station_url: forecast_url, time_of_last_request: DateTime.now)
+        time_zone = mini_json['time_zone']
+        postal_code_forecast.update(grid_id: grid_id,
+                                    grid_x: grid_x,
+                                    grid_y: grid_y,
+                                    station_url: forecast_url,
+                                    time_zone: time_zone,
+                                    time_of_last_request: DateTime.now)
       end
 
       def create_forecast_periods(forecast_url, postal_code)

@@ -51,3 +51,5 @@ The code coverage could be better. I'm not proud of it. I had difficulties with 
 * Latitude, Longitude, and address are stored in LatLongFromAddress. It populates postal_code, which is required for...
 * PostalCodeForecast saves weather station request information. I cache based on postal_code
 * ForecastPeriod saves an individual period's forecast
+
+12/20 I added indexes, and found the chache portion wasn't working well. It is working better now.

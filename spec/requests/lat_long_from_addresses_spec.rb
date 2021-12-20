@@ -17,12 +17,44 @@ RSpec.describe "/lat_long_from_addresses", type: :request do
   # LatLongFromAddress. As you add validations to LatLongFromAddress, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    { address: '75 Rev. Dr. Martin Luther King, Jr. Blvd.', city: 'Saint Paul', state: 'MN', zip: '55155'}
+    { address: '821 Marquette Avenue', city: 'Minneapolis'}
   }
 
   let(:invalid_attributes) {
     skip("Add a hash of attributes invalid for your model")
   }
+
+  let(:foshay_response_hash) do
+    [
+      {
+        "place_id": 324648326,
+        "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+        "osm_type": "way",
+        "osm_id": 6027555,
+        "boundingbox": [
+          "44.9772805",
+          "44.979212",
+          "-93.2700841",
+          "-93.26845"
+        ],
+        "lat": "44.9782466",
+        "lon": "-93.2692576",
+        "display_name": "Marquette Avenue South, Minneapolis, Hennepin County, Minnesota, 55401, United States",
+        "class": "highway",
+        "type": "tertiary",
+        "importance": 0.41000000000000003,
+        "address": {
+          "road": "Marquette Avenue South",
+          "city": "Minneapolis",
+          "county": "Hennepin County",
+          "state": "Minnesota",
+          "postcode": "55401",
+          "country": "United States",
+          "country_code": "us"
+        }
+      }
+    ]
+  end
 
   describe "GET /index" do
     it "renders a successful response" do
@@ -34,6 +66,14 @@ RSpec.describe "/lat_long_from_addresses", type: :request do
 
   describe "GET /show" do
     it "renders a successful response" do
+      stub_request(:get, "https://nominatim.openstreetmap.org/search?addressdetails=1&format=json&polygon=1&q=821%2BMarquette%2BAvenue,%2BMinneapolis").
+        with(
+          headers: {
+            'Accept'=>'*/*',
+            'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+            'User-Agent'=>'Ruby'
+          }).
+        to_return(status: 200, body: foshay_response_hash.to_json, headers: {})
       lat_long_from_address = LatLongFromAddress.create! valid_attributes
       get lat_long_from_address_url(lat_long_from_address)
       expect(response).to be_successful
@@ -56,7 +96,7 @@ RSpec.describe "/lat_long_from_addresses", type: :request do
   end
 
   describe "POST /create" do
-    let(:output_json) do
+    let(:station_hash) do
       {"@context"=>
          ["https://geojson.org/geojson-ld/geojson-context.jsonld",
           {"@version"=>"1.1",
@@ -104,29 +144,46 @@ RSpec.describe "/lat_long_from_addresses", type: :request do
 
     context "with valid parameters" do
       it "creates a new LatLongFromAddress" do
-        stub_request(:get, "https://nominatim.openstreetmap.org/search?addressdetails=1&format=json&polygon=1&q=75%2BRev.%2BDr.%2BMartin%2BLuther%2BKing,%2BJr.%2BBlvd.,%2BSaint%2BPaul").
+        stub_request(:get, "https://nominatim.openstreetmap.org/search?addressdetails=1&format=json&polygon=1&q=821%2BMarquette%2BAvenue,%2BMinneapolis").
           with(
             headers: {
               'Accept'=>'*/*',
               'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
               'User-Agent'=>'Ruby'
             }).
-          to_return(status: 200, body: output_json.to_json, headers: {})
+          to_return(status: 200, body: foshay_response_hash.to_json, headers: {})
 
+        stub_request(:get, "https://api.weather.gov/points/44.9782,-93.2693").
+          with(
+            headers: {
+              'Accept'=>'*/*',
+              'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+              'User-Agent'=>'Ruby'
+            }).
+          to_return(status: 200, body: station_hash.to_json, headers: {})
         expect {
           post lat_long_from_addresses_url, params: { lat_long_from_address: valid_attributes }
         }.to change(LatLongFromAddress, :count).by(1)
       end
 
       it "redirects to the created lat_long_from_address" do
-        stub_request(:get, "https://nominatim.openstreetmap.org/search?addressdetails=1&format=json&polygon=1&q=75%2BRev.%2BDr.%2BMartin%2BLuther%2BKing,%2BJr.%2BBlvd.,%2BSaint%2BPaul").
+        stub_request(:get, "https://nominatim.openstreetmap.org/search?addressdetails=1&format=json&polygon=1&q=821%2BMarquette%2BAvenue,%2BMinneapolis").
           with(
             headers: {
               'Accept'=>'*/*',
               'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
               'User-Agent'=>'Ruby'
             }).
-          to_return(status: 200, body: output_json.to_json, headers: {})
+          to_return(status: 200, body: foshay_response_hash.to_json, headers: {})
+
+        stub_request(:get, "https://api.weather.gov/points/44.9782,-93.2693").
+          with(
+            headers: {
+              'Accept'=>'*/*',
+              'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+              'User-Agent'=>'Ruby'
+            }).
+          to_return(status: 200, body: station_hash.to_json, headers: {})
 
         post lat_long_from_addresses_url, params: { lat_long_from_address: valid_attributes }
         expect(response).to redirect_to(lat_long_from_address_url(LatLongFromAddress.last))
