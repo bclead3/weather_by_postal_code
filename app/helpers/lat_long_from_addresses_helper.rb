@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module LatLongFromAddressesHelper
   TIME_ZONE_HASH = ActiveSupport::TimeZone::MAPPING
-  TIME_FORMAT = '%b %-d %-I:%M:%S %P'.freeze
-  DATE_FORMAT = '%Y  %b %-d'.freeze
+  TIME_FORMAT = '%b %-d %-I:%M:%S %P'
+  DATE_FORMAT = '%Y  %b %-d'
   def format_time(time_str, station_time_zone = nil)
     if station_time_zone.present?
       new_time_zone = convert_from_station_to_rails_tz(station_time_zone)
@@ -18,7 +20,7 @@ module LatLongFromAddressesHelper
     ts.strftime(DATE_FORMAT)
   end
 
-  #private
+  # private
   def format_time_zone(str_time_zone)
     return '' if str_time_zone.blank?
 
@@ -27,6 +29,7 @@ module LatLongFromAddressesHelper
     country = arr.join('/')
     "#{format_other(country)}/#{format_city(city)}"
   end
+
   def format_city(str_city)
     str_city.split('/')&.last&.split(' ')&.map(&:capitalize)&.join('_')
   end
@@ -41,7 +44,7 @@ module LatLongFromAddressesHelper
 
   def convert_from_station_to_rails_tz(station_time_zone)
     rails_time_zone_value = format_time_zone(station_time_zone)
-    hashlet = TIME_ZONE_HASH.select{ |x, y| y == rails_time_zone_value}
+    hashlet = TIME_ZONE_HASH.select { |_x, y| y == rails_time_zone_value }
 
     hashlet.keys.first
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddColumnsToPostalCodeForecast < ActiveRecord::Migration[6.1]
   def change
     add_column :postal_code_forecasts, :grid_id, :string

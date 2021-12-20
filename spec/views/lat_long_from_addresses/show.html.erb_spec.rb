@@ -1,21 +1,23 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "lat_long_from_addresses/show", type: :view do
+RSpec.describe 'lat_long_from_addresses/show', type: :view do
   before(:each) do
     @lat_long_from_address = assign(:lat_long_from_address, LatLongFromAddress.create!(
-      address: "75 Martin Luther King Jr, Blvd.",
-      city: "St. Paul",
-      state: "Minnesota",
-      postal_code: 55200,
-      lat: 3.5,
-      long: 4.5,
-      previously_looked_up: false,
-      json_resp: "MyText",
-      display_address: "75 Martin Luther King Jr, Blvd., St. Paul, Minnesota  55200"
-    ))
+                                                              address: '75 Martin Luther King Jr, Blvd.',
+                                                              city: 'St. Paul',
+                                                              state: 'Minnesota',
+                                                              postal_code: 55_200,
+                                                              lat: 3.5,
+                                                              long: 4.5,
+                                                              previously_looked_up: false,
+                                                              json_resp: 'MyText',
+                                                              display_address: '75 Martin Luther King Jr, Blvd., St. Paul, Minnesota  55200'
+                                                            ))
   end
 
-  it "renders attributes in <p>" do
+  it 'renders attributes in <p>' do
     render
     expect(rendered).to match(/Display address/)
     expect(rendered).to match(/Latitude/)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,57 +12,55 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_20_170007) do
-
-  create_table "forecast_periods", force: :cascade do |t|
-    t.string "postal_code"
-    t.datetime "start_time"
-    t.datetime "end_time"
-    t.string "period_name"
-    t.boolean "is_daytime"
-    t.float "temperature"
-    t.string "temperature_unit", default: "F"
-    t.float "wind_speed"
-    t.string "wind_direction"
-    t.string "icon_url"
-    t.string "short_forecast"
-    t.string "detailed_forecast"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["end_time"], name: "index_forecast_periods_on_end_time"
-    t.index ["postal_code", "start_time"], name: "index_forecast_periods_on_postal_code_and_start_time"
+ActiveRecord::Schema.define(version: 20_211_220_170_007) do
+  create_table 'forecast_periods', force: :cascade do |t|
+    t.string 'postal_code'
+    t.datetime 'start_time'
+    t.datetime 'end_time'
+    t.string 'period_name'
+    t.boolean 'is_daytime'
+    t.float 'temperature'
+    t.string 'temperature_unit', default: 'F'
+    t.float 'wind_speed'
+    t.string 'wind_direction'
+    t.string 'icon_url'
+    t.string 'short_forecast'
+    t.string 'detailed_forecast'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['end_time'], name: 'index_forecast_periods_on_end_time'
+    t.index %w[postal_code start_time], name: 'index_forecast_periods_on_postal_code_and_start_time'
   end
 
-  create_table "lat_long_from_addresses", force: :cascade do |t|
-    t.string "address"
-    t.string "city"
-    t.string "state"
-    t.integer "zip"
-    t.string "postal_code"
-    t.string "county"
-    t.string "country"
-    t.string "lat"
-    t.string "long"
-    t.integer "source_place_id"
-    t.boolean "previously_looked_up"
-    t.json "json_resp"
-    t.string "display_address"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "time_zone"
+  create_table 'lat_long_from_addresses', force: :cascade do |t|
+    t.string 'address'
+    t.string 'city'
+    t.string 'state'
+    t.integer 'zip'
+    t.string 'postal_code'
+    t.string 'county'
+    t.string 'country'
+    t.string 'lat'
+    t.string 'long'
+    t.integer 'source_place_id'
+    t.boolean 'previously_looked_up'
+    t.json 'json_resp'
+    t.string 'display_address'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.string 'time_zone'
   end
 
-  create_table "postal_code_forecasts", force: :cascade do |t|
-    t.string "postal_code"
-    t.datetime "time_of_last_request"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.json "forecast_cache"
-    t.string "grid_id"
-    t.integer "grid_x"
-    t.integer "grid_y"
-    t.string "station_url"
-    t.string "time_zone"
+  create_table 'postal_code_forecasts', force: :cascade do |t|
+    t.string 'postal_code'
+    t.datetime 'time_of_last_request'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.json 'forecast_cache'
+    t.string 'grid_id'
+    t.integer 'grid_x'
+    t.integer 'grid_y'
+    t.string 'station_url'
+    t.string 'time_zone'
   end
-
 end

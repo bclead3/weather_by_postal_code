@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 require 'httparty'
 
 module Assets
   module Web
     class WebAddressRequest
-
       def request_address(address_string, city = nil, state = nil, zip = nil)
         build_address = "#{address_string}, #{city}"
         build_address += ", #{state}" if state
@@ -28,11 +29,11 @@ module Assets
           addressdetails: 1
         }
 
-        uri.query = URI.encode_www_form( params )
+        uri.query = URI.encode_www_form(params)
         response = HTTParty.get(uri)
         JSON.parse(response.body)
-      rescue StandardError => std_err
-        std_err.message
+      rescue StandardError => e
+        e.message
       end
     end
   end

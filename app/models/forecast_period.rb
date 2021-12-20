@@ -1,7 +1,9 @@
-class ForecastPeriod < ApplicationRecord
-  #belongs_to :postal_code_forecast, foreign_key: :postal_code
+# frozen_string_literal: true
 
-  scope :postal_code_forecast, -> { PostalCodeForecast.find_by(self.postal_code) }
+class ForecastPeriod < ApplicationRecord
+  # belongs_to :postal_code_forecast, foreign_key: :postal_code
+
+  scope :postal_code_forecast, -> { PostalCodeForecast.find_by(postal_code) }
 
   validates :postal_code, presence: true
   validates :start_time,  presence: true

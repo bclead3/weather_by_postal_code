@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 desc 'test out ideas here'
 
@@ -106,6 +107,7 @@ namespace :white_board do
   end
 end
 
+# rubocop:disable Layout/LineLength
 # {"number"=>1,
 #  "name"=>"Overnight",
 #  "startTime"=>"2021-12-18T00:00:00-06:00",
@@ -2235,11 +2237,6 @@ end
 #       "shortForecast"=>"Mostly Cloudy",
 #       "detailedForecast"=>""}]}}
 
-
-
-
-
-
 # FORECAST
 # % rake white_board:test_ideas
 # The lat:44.9673 long:-93.3763 of 1610 Pennsylvania Ave Saint Louis Park
@@ -2465,3 +2462,4 @@ end
 #       "shortForecast"=>"Mostly Cloudy",
 #       "detailedForecast"=>
 #        "Mostly cloudy, with a low around 11. South southwest wind around 5 mph."}]}}
+# rubocop:enable Layout/LineLength

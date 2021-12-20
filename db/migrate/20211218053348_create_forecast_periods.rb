@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateForecastPeriods < ActiveRecord::Migration[6.1]
   def change
     create_table :forecast_periods do |t|

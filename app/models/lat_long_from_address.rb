@@ -1,9 +1,13 @@
+# frozen_string_literal: true
+
 require 'httparty'
 
 class LatLongFromAddress < ApplicationRecord
   include WebAddressRequest
 
-  scope :postal_code_forecast, -> { PostalCodeForecast.find_by(self.postal_code) } # belongs_to :postal_code_forecast, foreign_key: :postal_code
+  scope :postal_code_forecast, lambda {
+                                 PostalCodeForecast.find_by(postal_code)
+                               } # belongs_to :postal_code_forecast, foreign_key: :postal_code
 
   validates :address, presence: true
   validates :city, presence: true
@@ -21,18 +25,18 @@ class LatLongFromAddress < ApplicationRecord
     if working_zip.length > 5 &&
        working_zip.length < 10 &&
        country == 'United States'
-      final_four_digits = working_zip[-4..-1] # remove the last four
+      final_four_digits = working_zip[-4..] # remove the last four
       working_zip = working_zip.gsub(final_four_digits, '')
-      "%05d" % working_zip.to_i
+      '%05d' % working_zip.to_i
     elsif zip.to_s.length == 5
       postal_code[0..4]
     else
-      "%05d" % zip.to_i
+      '%05d' % zip.to_i
     end
   end
 
   def populate
-    unless self.previously_looked_up
+    unless previously_looked_up
       resp = issue_request(full_address)
       json_resp = JSON.parse(resp)
       json_resp = json_resp.first if json_resp.is_a?(Array)
@@ -56,14 +60,14 @@ class LatLongFromAddress < ApplicationRecord
     end
 
     postal_code_forecast = nil
-    postal_code_forecast = PostalCodeForecast.find_or_create_by(postal_code: self.postal_code) if self.postal_code
+    postal_code_forecast = PostalCodeForecast.find_or_create_by(postal_code: postal_code) if postal_code
     if postal_code_forecast&.time_of_last_request.blank?
       postal_code_forecast&.update(time_of_last_request: DateTime.now)
-      Rails.logger.info("Updated PostalCodeForecast #{self.postal_code} time_of_last_request:#{postal_code_forecast.time_of_last_request}")
+      Rails.logger.info("Updated PostalCodeForecast #{postal_code} time_of_last_request:#{postal_code_forecast.time_of_last_request}")
     end
     postal_code_forecast
-  rescue StandardError => std_err
-    Rails.logger.warn("Standard Error msg:#{std_err.message}")
+  rescue StandardError => e
+    Rails.logger.warn("Standard Error msg:#{e.message}")
   end
 end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 # Specs in this file have access to a helper object that includes
@@ -12,8 +14,8 @@ RSpec.describe LatLongFromAddressesHelper, type: :helper do
     end
 
     it 'formats the time with time zone' do
-
-      expect(helper.format_time('2021-12-20T18:00:00+00:00', convert_from_station_to_rails_tz('america/chicago'))).to eq('Dec 20 6:00:00 pm')
+      expect(helper.format_time('2021-12-20T18:00:00+00:00',
+                                convert_from_station_to_rails_tz('america/chicago'))).to eq('Dec 20 6:00:00 pm')
     end
 
     it 'format_city for retrieving appropriate time zone' do
@@ -32,7 +34,7 @@ RSpec.describe LatLongFromAddressesHelper, type: :helper do
 
   describe 'format_time_zone' do
     it 'handles "america/argentina/buenos aires" to output "America/Argentina/Buenos_Aires"' do
-      expect(helper.format_time_zone("america/argentina/buenos aires")).to eq("America/Argentina/Buenos_Aires")
+      expect(helper.format_time_zone('america/argentina/buenos aires')).to eq('America/Argentina/Buenos_Aires')
       expect(helper.format_time_zone('america/new york')).to eq('America/New_York')
       expect(helper.format_time_zone('america/chicago')).to eq('America/Chicago')
       expect(helper.format_time_zone('america/denver')).to eq('America/Denver')

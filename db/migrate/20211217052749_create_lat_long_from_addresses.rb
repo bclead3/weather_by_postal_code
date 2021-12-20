@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateLatLongFromAddresses < ActiveRecord::Migration[6.1]
   def change
     create_table :lat_long_from_addresses do |t|

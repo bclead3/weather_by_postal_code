@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 require 'httparty'
 
 module Assets
   module Web
     class WebStationRequest
-
       def request_weather_station(lat, long)
         return 'Must have valid latitude' if lat.empty?
         return 'Must have valid longitude' if long.empty?
