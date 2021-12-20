@@ -57,12 +57,13 @@ class LatLongFromAddress < ApplicationRecord
 
     postal_code_forecast = nil
     postal_code_forecast = PostalCodeForecast.find_or_create_by(postal_code: self.postal_code) if self.postal_code
-    if postal_code_forecast&.time_of_last_request.nil?
+    if postal_code_forecast&.time_of_last_request.blank?
       postal_code_forecast&.update(time_of_last_request: DateTime.now)
+      Rails.logger.info("Updated PostalCodeForecast #{self.postal_code} time_of_last_request:#{postal_code_forecast.time_of_last_request}")
     end
     postal_code_forecast
   rescue StandardError => std_err
-    puts "Standard Error msg:#{std_err.message}"
+    Rails.logger.warn("Standard Error msg:#{std_err.message}")
   end
 end
 
