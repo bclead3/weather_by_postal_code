@@ -20,16 +20,10 @@
   <%= @lat_long_from_address.previously_looked_up %>
 </p>
 
-<!--<p>-->
-<!--  <strong>Json resp:</strong>-->
-  <%#= @lat_long_from_address.json_resp %>
-<!--</p>-->
+<%= link_to 'Back to Start', root_path %><br/><br/>
 
-
-
-
-<%- cache_hash = @postal_code_forecast&.forecast_cache %>
-<%- if cache_hash %>
+<%- cache_hash = @postal_code_forecast.is_a?(PostalCodeForecast) ? @postal_code_forecast&.forecast_cache : [] %>
+<%- unless cache_hash.blank? %>
   <%= format_month_date(cache_hash['periods'].first['start_time']) %>
     <table>
       <tr>
@@ -61,4 +55,4 @@
     </table>
 <% end %>
 <%= link_to 'Edit', edit_lat_long_from_address_path(@lat_long_from_address) %> |
-<%= link_to 'Back', lat_long_from_addresses_path %>
+<%= link_to 'Back', root_path %>

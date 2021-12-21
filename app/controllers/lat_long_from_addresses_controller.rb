@@ -28,8 +28,7 @@ class LatLongFromAddressesController < ApplicationController
   def create
     address = lat_long_from_address_params[:address]
     city = lat_long_from_address_params[:city]
-
-    @lat_long_from_address = LatLongFromAddress.find_or_create_by(address: address, city: city)
+    @lat_long_from_address = LatLongFromAddress.find_or_create_by!(address: address, city: city)
 
     @postal_code_forecast = @lat_long_from_address.populate
     is_too_early = @postal_code_forecast.below_cache_expiration?
@@ -43,12 +42,11 @@ class LatLongFromAddressesController < ApplicationController
       @lat_long_from_address.time_zone = nugget_hash[:time_zone]
     end
 
-    if is_too_early
+    if is_too_early && !@postal_code_forecast.forecast_cache.blank?
       # do nothing
-    elsif !@postal_code_forecast.forecast_cache.blank?
-      is_too_early = false
     else
       ForecastPeriod.where(postal_code: postal_code).delete_all
+
       forecast_obj.create_forecast_periods(nugget_hash[:forecast_url], postal_code)
       forecast_obj.create_forecast_periods(nugget_hash[:hourly_url], postal_code)
 
@@ -76,14 +74,21 @@ class LatLongFromAddressesController < ApplicationController
         format.json { render json: @lat_long_from_address.errors, status: :unprocessable_entity }
       end
     end
+  rescue ActiveRecord::RecordInvalid => rec_invld
+    Rails.logger.error("Error in create with params:#{params} message:#{rec_invld.record.errors.errors.first.full_message}")
+    format.html { render :new, status: :unprocessable_entity }
+  rescue StandardError => std_err
+    Rails.logger.error("Error in create with params:#{params} message:#{std_err.message}")
+    format.html { render :new, status: :unprocessable_entity }
   end
 
   # PATCH/PUT /lat_long_from_addresses/1 or /lat_long_from_addresses/1.json
   def update
     respond_to do |format|
       if @lat_long_from_address.update(lat_long_from_address_params)
-        format.html { redirect_to @lat_long_from_address, notice: 'Lat long from address was successfully updated.' }
-        format.json { render :show, status: :ok, location: @lat_long_from_address }
+        @postal_code_forecast = @lat_long_from_address.populate
+        format.html { redirect_to @lat_long_from_address, postal_code_forecast: @postal_code_forecast, notice: 'Lat long from address was successfully updated.' }
+        format.json { render :show, status: :ok, location: @lat_long_from_address, postal_code_forecast: @postal_code_forecast }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @lat_long_from_address.errors, status: :unprocessable_entity }
@@ -120,7 +125,8 @@ class LatLongFromAddressesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def lat_long_from_address_params
-    params.require(:lat_long_from_address).permit(:address, :city, :state, :zip, :lat, :long, :previously_looked_up,
+    params.require(:lat_long_from_address).permit(:address, :city, :state, :zip, :postal_code, :county,
+                                                  :country, :lat, :long, :previously_looked_up,
                                                   :json_resp, :display_address)
   end
 end

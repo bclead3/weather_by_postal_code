@@ -240,7 +240,6 @@ RSpec.describe LatLongFromAddress, type: :model do
         .to_return(status: 200, body: station_hash.to_json, headers: {})
 
       lat_long_from_address = LatLongFromAddress.create valid_attributes
-      puts lat_long_from_address.errors.errors.inspect
       expect(lat_long_from_address.address).to eq('821 Marquette Avenue')
       expect(lat_long_from_address.city).to eq('Minneapolis')
       expect(lat_long_from_address.state).to eq('MN')

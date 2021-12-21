@@ -48,7 +48,7 @@ class LatLongFromAddress < ApplicationRecord
         self.previously_looked_up = true
         self.display_address = json_resp['display_name']
         if json_resp['address']
-          self.city = json_resp['address']['city']
+          self.city = json_resp['address']['city'] || json_resp['address']['town']
           self.county = json_resp['address']['county']
           self.state = json_resp['address']['state']
           self.postal_code = json_resp['address']['postcode']

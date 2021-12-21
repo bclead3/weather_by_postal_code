@@ -22,7 +22,7 @@ RSpec.describe '/lat_long_from_addresses', type: :request do
   end
 
   let(:invalid_attributes) do
-    skip('Add a hash of attributes invalid for your model')
+    { address: '821 Marquette Avenue' }
   end
 
   let(:foshay_response_hash) do
@@ -55,6 +55,336 @@ RSpec.describe '/lat_long_from_addresses', type: :request do
         }
       }
     ]
+  end
+
+  let(:invalid_response_hash) do
+    [
+      {
+        "place_id":301707752,
+        "licence":"Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+        "osm_type":"way",
+        "osm_id":21448561,
+        "boundingbox":["44.515070329546","44.515170329546","-88.04508870909","-88.04498870909"],
+        "lat":"44.515120329546484",
+        "lon":"-88.04503870909025",
+        "display_name":"821, Marquette Avenue, Marquette Park, Green Bay, Brown County, Wisconsin, 54304, United States",
+        "class":"place",
+        "type":"house",
+        "importance":0.31100000000000005,
+        "address":{
+          "house_number":"821",
+          "road":"Marquette Avenue",
+          "neighbourhood":"Marquette Park",
+          "city":"Green Bay",
+          "county":"Brown County",
+          "state":"Wisconsin",
+          "postcode":"54304",
+          "country":"United States",
+          "country_code":"us"
+        }
+      }
+    ]
+  end
+
+  let(:invalid_attribute_weather_station) do
+    {
+      "@context": [
+        "https://geojson.org/geojson-ld/geojson-context.jsonld",
+        {
+          "@version": "1.1",
+          "wx": "https://api.weather.gov/ontology#",
+          "s": "https://schema.org/",
+          "geo": "http://www.opengis.net/ont/geosparql#",
+          "unit": "http://codes.wmo.int/common/unit/",
+          "@vocab": "https://api.weather.gov/ontology#",
+          "geometry": {
+            "@id": "s:GeoCoordinates",
+            "@type": "geo:wktLiteral"
+          },
+          "city": "s:addressLocality",
+          "state": "s:addressRegion",
+          "distance": {
+            "@id": "s:Distance",
+            "@type": "s:QuantitativeValue"
+          },
+          "bearing": {
+            "@type": "s:QuantitativeValue"
+          },
+          "value": {
+            "@id": "s:value"
+          },
+          "unitCode": {
+            "@id": "s:unitCode",
+            "@type": "@id"
+          },
+          "forecastOffice": {
+            "@type": "@id"
+          },
+          "forecastGridData": {
+            "@type": "@id"
+          },
+          "publicZone": {
+            "@type": "@id"
+          },
+          "county": {
+            "@type": "@id"
+          }
+        }
+      ],
+      "id": "https://api.weather.gov/points/44.5150999,-88.045",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -88.045000000000002,
+          44.515099900000003
+        ]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/points/44.5150999,-88.045",
+        "@type": "wx:Point",
+        "cwa": "GRB",
+        "forecastOffice": "https://api.weather.gov/offices/GRB",
+        "gridId": "GRB",
+        "gridX": 77,
+        "gridY": 31,
+        "forecast": "https://api.weather.gov/gridpoints/GRB/77,31/forecast",
+        "forecastHourly": "https://api.weather.gov/gridpoints/GRB/77,31/forecast/hourly",
+        "forecastGridData": "https://api.weather.gov/gridpoints/GRB/77,31",
+        "observationStations": "https://api.weather.gov/gridpoints/GRB/77,31/stations",
+        "relativeLocation": {
+          "type": "Feature",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -87.984168999999994,
+              44.520676000000002
+            ]
+          },
+          "properties": {
+            "city": "Green Bay",
+            "state": "WI",
+            "distance": {
+              "unitCode": "wmoUnit:m",
+              "value": 4862.7143397420996
+            },
+            "bearing": {
+              "unitCode": "wmoUnit:degree_(angle)",
+              "value": 262
+            }
+          }
+        },
+        "forecastZone": "https://api.weather.gov/zones/forecast/WIZ039",
+        "county": "https://api.weather.gov/zones/county/WIC009",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/WIZ039",
+        "timeZone": "America/Chicago",
+        "radarStation": "KGRB"
+      }
+    }
+  end
+
+  let(:weather_forecast_hash) do
+    {
+      "@context": [
+        "https://geojson.org/geojson-ld/geojson-context.jsonld",
+        {
+          "@version": "1.1",
+          "wx": "https://api.weather.gov/ontology#",
+          "geo": "http://www.opengis.net/ont/geosparql#",
+          "unit": "http://codes.wmo.int/common/unit/",
+          "@vocab": "https://api.weather.gov/ontology#"
+        }
+      ],
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -93.292565100000004,
+              44.9869287
+            ],
+            [
+              -93.292945799999998,
+              44.965544899999998
+            ],
+            [
+              -93.262731399999993,
+              44.9652733
+            ],
+            [
+              -93.262343999999999,
+              44.986657100000002
+            ],
+            [
+              -93.292565100000004,
+              44.9869287
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "updated": "2021-12-21T04:44:23+00:00",
+        "units": "us",
+        "forecastGenerator": "BaselineForecastGenerator",
+        "generatedAt": "2021-12-21T05:28:43+00:00",
+        "updateTime": "2021-12-21T04:44:23+00:00",
+        "validTimes": "2021-12-20T22:00:00+00:00/P7DT3H",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 259.07999999999998
+        },
+        "periods": [
+          {
+            "number": 1,
+            "name": "Tonight",
+            "startTime": "2021-12-20T23:00:00-06:00",
+            "endTime": "2021-12-21T06:00:00-06:00",
+            "isDaytime": false,
+            "temperature": 7,
+            "temperatureUnit": "F",
+            "temperatureTrend": "rising",
+            "windSpeed": "0 to 5 mph",
+            "windDirection": "SSE",
+            "icon": "https://api.weather.gov/icons/land/night/bkn/snow,20?size=medium",
+            "shortForecast": "Mostly Cloudy then Chance Snow Showers",
+            "detailedForecast": "A chance of snow showers between 4am and 5am, then a slight chance of snow. Mostly cloudy. Low around 7, with temperatures rising to around 11 overnight. South southeast wind 0 to 5 mph. Chance of precipitation is 20%."
+          },
+          {
+            "number": 2,
+            "name": "Tuesday",
+            "startTime": "2021-12-21T06:00:00-06:00",
+            "endTime": "2021-12-21T18:00:00-06:00",
+            "isDaytime": true,
+            "temperature": 22,
+            "temperatureUnit": "F",
+            "temperatureTrend": "falling",
+            "windSpeed": "10 to 15 mph",
+            "windDirection": "SW",
+            "icon": "https://api.weather.gov/icons/land/day/snow,80/bkn?size=medium",
+            "shortForecast": "Light Snow then Mostly Cloudy",
+            "detailedForecast": "Snow before noon. Mostly cloudy. High near 22, with temperatures falling to around 16 in the afternoon. Southwest wind 10 to 15 mph. Chance of precipitation is 80%. New snow accumulation of less than one inch possible."
+          },
+          {
+            "number": 3,
+            "name": "Tuesday Night",
+            "startTime": "2021-12-21T18:00:00-06:00",
+            "endTime": "2021-12-22T06:00:00-06:00",
+            "isDaytime": false,
+            "temperature": 6,
+            "temperatureUnit": "F",
+            "temperatureTrend": nil,
+            "windSpeed": "5 to 10 mph",
+            "windDirection": "WSW",
+            "icon": "https://api.weather.gov/icons/land/night/sct?size=medium",
+            "shortForecast": "Partly Cloudy",
+            "detailedForecast": "Partly cloudy, with a low around 6. West southwest wind 5 to 10 mph."
+          }
+        ]
+      }
+    }
+  end
+
+  let(:hourly_forecast_hash) do
+    {
+      "@context": [
+        "https://geojson.org/geojson-ld/geojson-context.jsonld",
+        {
+          "@version": "1.1",
+          "wx": "https://api.weather.gov/ontology#",
+          "geo": "http://www.opengis.net/ont/geosparql#",
+          "unit": "http://codes.wmo.int/common/unit/",
+          "@vocab": "https://api.weather.gov/ontology#"
+        }
+      ],
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -93.292565100000004,
+              44.9869287
+            ],
+            [
+              -93.292945799999998,
+              44.965544899999998
+            ],
+            [
+              -93.262731399999993,
+              44.9652733
+            ],
+            [
+              -93.262343999999999,
+              44.986657100000002
+            ],
+            [
+              -93.292565100000004,
+              44.9869287
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "updated": "2021-12-21T04:44:23+00:00",
+        "units": "us",
+        "forecastGenerator": "HourlyForecastGenerator",
+        "generatedAt": "2021-12-21T05:34:47+00:00",
+        "updateTime": "2021-12-21T04:44:23+00:00",
+        "validTimes": "2021-12-20T22:00:00+00:00/P7DT3H",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 259.07999999999998
+        },
+        "periods": [
+          {
+            "number": 1,
+            "name": "",
+            "startTime": "2021-12-20T23:00:00-06:00",
+            "endTime": "2021-12-21T00:00:00-06:00",
+            "isDaytime": false,
+            "temperature": 10,
+            "temperatureUnit": "F",
+            "temperatureTrend": nil,
+            "windSpeed": "0 mph",
+            "windDirection": "NW",
+            "icon": "https://api.weather.gov/icons/land/night/sct?size=small",
+            "shortForecast": "Partly Cloudy",
+            "detailedForecast": ""
+          },
+          {
+            "number": 2,
+            "name": "",
+            "startTime": "2021-12-21T00:00:00-06:00",
+            "endTime": "2021-12-21T01:00:00-06:00",
+            "isDaytime": false,
+            "temperature": 10,
+            "temperatureUnit": "F",
+            "temperatureTrend": nil,
+            "windSpeed": "5 mph",
+            "windDirection": "NNW",
+            "icon": "https://api.weather.gov/icons/land/night/sct?size=small",
+            "shortForecast": "Partly Cloudy",
+            "detailedForecast": ""
+          },
+          {
+            "number": 3,
+            "name": "",
+            "startTime": "2021-12-21T01:00:00-06:00",
+            "endTime": "2021-12-21T02:00:00-06:00",
+            "isDaytime": false,
+            "temperature": 10,
+            "temperatureUnit": "F",
+            "temperatureTrend": nil,
+            "windSpeed": "0 mph",
+            "windDirection": "SE",
+            "icon": "https://api.weather.gov/icons/land/night/bkn?size=small",
+            "shortForecast": "Mostly Cloudy",
+            "detailedForecast": ""
+          }
+        ]
+      }
+    }
   end
 
   describe 'GET /index' do
@@ -166,6 +496,24 @@ RSpec.describe '/lat_long_from_addresses', type: :request do
             }
           )
           .to_return(status: 200, body: station_hash.to_json, headers: {})
+
+        stub_request(:get, "https://api.weather.gov/gridpoints/MPX/107,71/forecast").
+          with(
+            headers: {
+              'Accept'=>'*/*',
+              'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+              'User-Agent'=>'Ruby'
+            }).
+          to_return(status: 200, body: weather_forecast_hash.to_json, headers: {})
+
+        stub_request(:get, "https://api.weather.gov/gridpoints/MPX/107,71/forecast/hourly").
+          with(
+            headers: {
+              'Accept'=>'*/*',
+              'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+              'User-Agent'=>'Ruby'
+            }).
+          to_return(status: 200, body: hourly_forecast_hash.to_json, headers: {})
         expect do
           post lat_long_from_addresses_url, params: { lat_long_from_address: valid_attributes }
         end.to change(LatLongFromAddress, :count).by(1)
@@ -192,6 +540,24 @@ RSpec.describe '/lat_long_from_addresses', type: :request do
           )
           .to_return(status: 200, body: station_hash.to_json, headers: {})
 
+        stub_request(:get, "https://api.weather.gov/gridpoints/MPX/107,71/forecast").
+          with(
+            headers: {
+              'Accept'=>'*/*',
+              'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+              'User-Agent'=>'Ruby'
+            }).
+          to_return(status: 200, body: weather_forecast_hash.to_json, headers: {})
+
+        stub_request(:get, "https://api.weather.gov/gridpoints/MPX/107,71/forecast/hourly").
+          with(
+            headers: {
+              'Accept'=>'*/*',
+              'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+              'User-Agent'=>'Ruby'
+            }).
+          to_return(status: 200, body: hourly_forecast_hash.to_json, headers: {})
+
         post lat_long_from_addresses_url, params: { lat_long_from_address: valid_attributes }
         expect(response).to redirect_to(lat_long_from_address_url(LatLongFromAddress.last))
       end
@@ -199,14 +565,26 @@ RSpec.describe '/lat_long_from_addresses', type: :request do
 
     context 'with invalid parameters' do
       it 'does not create a new LatLongFromAddress' do
+        stub_request(:get, "https://nominatim.openstreetmap.org/search?addressdetails=1&format=json&polygon=1&q=821%2BMarquette%2BAvenue,%2B").
+          with(
+            headers: {
+              'Accept'=>'*/*',
+              'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+              'User-Agent'=>'Ruby'
+            }).
+          to_return(status: 200, body: invalid_response_hash.to_json, headers: {})
+        stub_request(:get, "https://api.weather.gov/points/44.5151,-88.045").
+          with(
+            headers: {
+              'Accept'=>'*/*',
+              'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+              'User-Agent'=>'Ruby'
+            }).
+          to_return(status: 200, body: invalid_attribute_weather_station.to_json, headers: {})
+
         expect do
           post lat_long_from_addresses_url, params: { lat_long_from_address: invalid_attributes }
-        end.to change(LatLongFromAddress, :count).by(0)
-      end
-
-      it "renders a successful response (i.e. to display the 'new' template)" do
-        post lat_long_from_addresses_url, params: { lat_long_from_address: invalid_attributes }
-        expect(response).to be_successful
+        end.to raise_error( ArgumentError) #: too few arguments
       end
     end
   end
@@ -214,29 +592,48 @@ RSpec.describe '/lat_long_from_addresses', type: :request do
   describe 'PATCH /update' do
     context 'with valid parameters' do
       let(:new_attributes) do
-        skip('Add a hash of attributes valid for your model')
+        { county: 'Hennepin', country: 'United States', postal_code: 55401 }
       end
 
       it 'updates the requested lat_long_from_address' do
+        stub_request(:get, "https://nominatim.openstreetmap.org/search?addressdetails=1&format=json&polygon=1&q=821%2BMarquette%2BAvenue,%2BMinneapolis").
+          with(
+            headers: {
+              'Accept'=>'*/*',
+              'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+              'User-Agent'=>'Ruby'
+            }).
+          to_return(status: 200, body: foshay_response_hash.to_json, headers: {})
+        stub_request(:get, "https://nominatim.openstreetmap.org/search?addressdetails=1&format=json&polygon=1&q=821%2BMarquette%2BAvenue,%2BMinneapolis%2B%2B55401").
+          with(
+            headers: {
+              'Accept'=>'*/*',
+              'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+              'User-Agent'=>'Ruby'
+            }).
+          to_return(status: 200, body: foshay_response_hash.to_json, headers: {})
+
         lat_long_from_address = LatLongFromAddress.create! valid_attributes
         patch lat_long_from_address_url(lat_long_from_address), params: { lat_long_from_address: new_attributes }
         lat_long_from_address.reload
-        skip('Add assertions for updated state')
+        expect(lat_long_from_address.county).to eq('Hennepin County')
+        expect(lat_long_from_address.country).to eq('United States')
+        expect(lat_long_from_address.postal_code).to eq('55401')
       end
 
       it 'redirects to the lat_long_from_address' do
+        stub_request(:get, "https://nominatim.openstreetmap.org/search?addressdetails=1&format=json&polygon=1&q=821%2BMarquette%2BAvenue,%2BMinneapolis%2B%2B55401").
+          with(
+            headers: {
+              'Accept'=>'*/*',
+              'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+              'User-Agent'=>'Ruby'
+            }).
+          to_return(status: 200, body: foshay_response_hash.to_json, headers: {})
         lat_long_from_address = LatLongFromAddress.create! valid_attributes
         patch lat_long_from_address_url(lat_long_from_address), params: { lat_long_from_address: new_attributes }
         lat_long_from_address.reload
         expect(response).to redirect_to(lat_long_from_address_url(lat_long_from_address))
-      end
-    end
-
-    context 'with invalid parameters' do
-      it "renders a successful response (i.e. to display the 'edit' template)" do
-        lat_long_from_address = LatLongFromAddress.create! valid_attributes
-        patch lat_long_from_address_url(lat_long_from_address), params: { lat_long_from_address: invalid_attributes }
-        expect(response).to be_successful
       end
     end
   end
