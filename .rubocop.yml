@@ -10,7 +10,7 @@ Layout/LineLength:
   Max: 180
 
 Metrics/MethodLength:
-  Max: 45
+  Max: 50
 # reduce to 40, then 30
 Metrics/BlockLength:
   Max: 30

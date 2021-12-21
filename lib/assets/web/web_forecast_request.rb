@@ -42,7 +42,7 @@ module Assets
       def create_forecast_periods(forecast_url, postal_code)
         page = HTTParty.get(forecast_url)
         json_forecast_resp = JSON.parse(page.body)
-        json_forecast_resp['properties']['periods'].each_with_index do |period_json, period_index|
+        json_forecast_resp['properties']['periods'].each_with_index do |period_json, _period_index|
           # puts period_index + 1
           period_json = transform_json_keys(period_json, postal_code)
           forecast_period = ForecastPeriod.find_or_create_by(postal_code: postal_code,

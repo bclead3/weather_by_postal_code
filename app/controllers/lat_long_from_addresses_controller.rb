@@ -74,11 +74,11 @@ class LatLongFromAddressesController < ApplicationController
         format.json { render json: @lat_long_from_address.errors, status: :unprocessable_entity }
       end
     end
-  rescue ActiveRecord::RecordInvalid => rec_invld
-    Rails.logger.error("Error in create with params:#{params} message:#{rec_invld.record.errors.errors.first.full_message}")
+  rescue ActiveRecord::RecordInvalid => e
+    Rails.logger.error("Error in create with params:#{params} message:#{e.record.errors.errors.first.full_message}")
     format.html { render :new, status: :unprocessable_entity }
-  rescue StandardError => std_err
-    Rails.logger.error("Error in create with params:#{params} message:#{std_err.message}")
+  rescue StandardError => e
+    Rails.logger.error("Error in create with params:#{params} message:#{e.message}")
     format.html { render :new, status: :unprocessable_entity }
   end
 
