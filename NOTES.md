@@ -62,6 +62,23 @@
 * https://github.com/travisjeffery/timecop
 * https://stackoverflow.com/questions/8706930/converting-nested-hash-keys-from-camelcase-to-snake-case-in-ruby
 * https://stackoverflow.com/questions/11451535/gitignore-is-ignored-by-git
+* https://stackoverflow.com/questions/38198668/rails-5-load-lib-files-in-production
+* https://stackoverflow.com/questions/21544519/correct-way-to-test-lib-folder-with-rspec
+* https://dev.to/husteadrobert/how-to-stop-api-calls-in-rspec-and-return-your-own-data-4fa2
+* https://thoughtbot.com/blog/how-to-stub-external-services-in-tests
+* https://stackoverflow.com/questions/1430247/passing-parameters-in-rails-redirect-to
+* http://vaidehijoshi.github.io/blog/2015/07/21/all-the-columns-fit-to-index-unique-plus-compound-indexing/
+* https://stackoverflow.com/questions/15625947/how-do-i-format-datetime-in-rails
+* https://www.shortcutfoo.com/app/dojos/ruby-date-format-strftime/cheatsheet
+* https://stackoverflow.com/questions/2695837/rails-convert-utc-datetime-to-another-time-zone
+* https://api.rubyonrails.org/classes/ActiveSupport/TimeWithZone.html
+* https://stackoverflow.com/questions/1386871/convert-time-from-one-time-zone-to-another-in-rails/1386889
+* https://api.rubyonrails.org/classes/ActiveSupport/TimeZone.html
+* https://medium.com/rubyinside/a-deep-dive-into-csrf-protection-in-rails-19fa0a42c0ef
+* https://www.rubyguides.com/2019/10/scopes-in-ruby-on-rails/
+* https://api.rubyonrails.org/v6.1.4/classes/ActiveRecord/Callbacks.html
+* https://rpanachi.com/2016/07/04/ruby-is-time-to-talk-about-timezones
+* https://guides.rubyonrails.org/association_basics.html#choosing-between-has-many-through-and-has-and-belongs-to-many
 
 
 #### Markdown Syntax
